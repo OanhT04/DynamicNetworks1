@@ -33,7 +33,7 @@ python ./graph.py [--input graph_file.gml] [--create_random_graph n c] [--multi_
 Example: 
 python ./graph.py --create_random_graph 150 1.35 --multi_BFS 3 12 47 --analyze --plot --output result_graph.gml
 
-The command generates a 150 node Erdős–Rényi graph, runs BFS from nodes 3, 12, and 47, runs full analysis on the graph, visualizaes the graph, and exports the result to a gml file. 
+The command generates a 150 node Erdős–Rényi graph, runs BFS from nodes 3, 12, and 47, runs full analysis on the graph, visualizes the graph, and exports the result to a gml file. 
 
 
 
