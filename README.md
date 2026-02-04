@@ -22,7 +22,7 @@
   
 ## Usage Instructions
 1. install required libraries
-pip install networkx matplotli
+pip install networkx matplotlib
 2. Run program using terminal or command prompt
 Command line structure: python ./graph.py [--input graph_file.gml] [--create_random_graph n c] [--multi_BFS a1 a2 ...] [--analyze] [--plot] [--output out_graph_file.gml]
 
@@ -41,12 +41,8 @@ The command generates a 150 node Erdős–Rényi graph, runs BFS from nodes 3, 1
 
 The program uses `argparse` to define these command-line options:
 
-- `--create_random_graph n c`
-- `--multi_BFS a1 a2 ...`
-- `--analyze`
-- `--plot`
-- `--input FILE` (defined but not used in `main()`)
-- `--output FILE` (not implemented)
+ `--create_random_graph n c`  `--multi_BFS a1 a2 ...` (a1, a2 ... are node labels) 
+ `--analyze` `--plot`  `--input FILE` (in progress) - `--output FILE` (in progress)
 
 **Generate Random Graph** using the **Erdos-Renyi model** -> generate_graph(n: int, c: float):
 - n = # of nodes, c = positive constant 
@@ -91,6 +87,3 @@ plot(G) function visualizes the generated graph using a spring layout
 Command Line → argparse → Parsed Namespace → Graph Input/Generation → BFS → Analysis → Visualization → Export
 
 
-Install dependencies:
-```bash
-pip install networkx matplotlib
