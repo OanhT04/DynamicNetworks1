@@ -80,7 +80,7 @@ The program uses `argparse` to define these command-line options:
 **Graph Visualization**
 plot(G) function visualizes the generated graph using a spring layout 
 - all nodes and edges are drawn with labels and a legend is provided to distinguish normal nodes from isolated nodes.
-- visualization window is opened
+- graph visualization displayed through open window using matplotlib .show function
 
 **Main**
 - parses arguments
