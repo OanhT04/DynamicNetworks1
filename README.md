@@ -24,7 +24,10 @@
 1. install required libraries
 pip install networkx matplotlib
 2. Run program using terminal or command prompt
-Command line structure: python ./graph.py [--input graph_file.gml] [--create_random_graph n c] [--multi_BFS a1 a2 ...] [--analyze] [--plot] [--output out_graph_file.gml]
+
+Command line structure: 
+
+python ./graph.py [--input graph_file.gml] [--create_random_graph n c] [--multi_BFS a1 a2 ...] [--analyze] [--plot] [--output out_graph_file.gml]
 
 
 Example: 
