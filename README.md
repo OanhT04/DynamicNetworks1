@@ -1,8 +1,9 @@
 #### Oanh Tran:  029661786
 #### William Trinh: 
 # CECS 427 -- Assignment 1: Graph.py
-#### Oanh Tran:  029661786
-#### William Trinh: 
+#### Oanh Tran  029661786
+#### William Trinh 030650397
+
 `graph.py` is a command-line Python program that works with **undirected graphs** using **NetworkX**. It can:
 
 - Generate a random graph using an Erdős–Rényi-style probability 
@@ -28,24 +29,28 @@ pip install networkx matplotlib
 Command line structure: 
 
 python ./graph.py [--input graph_file.gml] [--create_random_graph n c] [--multi_BFS a1 a2 ...] [--analyze] [--plot] [--output out_graph_file.gml]
-
-
-Example: 
-python ./graph.py --create_random_graph 150 1.35 --multi_BFS 3 12 47 --analyze --plot --output result_graph.gml
-
-The command generates a 150 node Erdős–Rényi graph, runs BFS from nodes 3, 12, and 47, runs full analysis on the graph, visualizes the graph, and exports the result to a gml file. 
-
-
-
+- n integer for number of nodes
+- c, a positive integer or float
+- a1, a2, ... one or more nodes to perform BFS
 
 
 
 ## Implementation
 
+**Graph input/Output**
+- Graphs are loaded from .gml files using read_graph_file(file) and exported using output_graph(G, file, bfs_results=None).
+- During export, the graph is enriched with node attributes:
+  - component_id: ID of the connected component the node belongs to
+  - is_isolated: indicates whether the node is isolated
+- If BFS is performed:
+  - bfs_<source>_distance: shortest-path distance from the BFS source
+  - bfs_<source>_parent: parent node in the BFS tree
+- BFS distances are computed by compute_distances(parent_dict, source), which reconstructs path lengths by tracing parent pointers back to the source.
+
 The program uses `argparse` to define these command-line options:
 
  `--create_random_graph n c`  `--multi_BFS a1 a2 ...` (a1, a2 ... are node labels) 
- `--analyze` `--plot`  `--input FILE` (in progress) - `--output FILE` (in progress)
+ `--analyze` `--plot`  `--input FILE`  - `--output FILE` 
 
 **Generate Random Graph** using the **Erdos-Renyi model** -> generate_graph(n: int, c: float):
 - n = # of nodes, c = positive constant 
@@ -60,33 +65,70 @@ The program uses `argparse` to define these command-line options:
 - implements BFS algorithm and uses a queue to explore nodes level by level. A set tracks visited nodes, and a dictionary stores parent-child relationships, used for forming the BFS tree.
 - prints the order in which nodes are visited and returns parent dictionary
 
-**BFS Tree Printing** -> printBFS(parent, start): 
-- converts the parent dictionary produced by BFS into a tree structure using ASCII characters to visually represent parent-child relationships.
+**BFS Tree Visualuzation** -> draw_bfs_tree(parent, start) and print_bfs_tree(parent, start)
+- converts the parent map into a directed graph (nx.DiGraph) and lays nodes out by BFS level (distance). It saves an image bfs_tree_<source>.png and also displays it.
+- prints a readable BFS structure in terminal to add on
 
 **Multi-Source BFS** -> multiBFS(G, *start_nodes):
 - allows BFS to be executed from multiple starting nodes
-- verifies input node exists in graph; if not error message relayed. ex: "Node 50 does not exist in the graph"
-- runs bfs(graph, start) and printBFS(parent, start): tree for all start nodes
-- example output: <img width="1759" height="709" alt="image" src="https://github.com/user-attachments/assets/93352caf-6066-4432-ab7f-61c97329b0a6" />
-
+- loops through all user-provided nodes, validates that each exists in the graph, and stores results in a dictionary
 
 **Analysis** -> analysis(G):
+-  counts of nodes and edges
 - connected components: counts and lists connected components
-- cycle detection: detects whether a cycle exists and prints which nodes are in a cycle
 - isolated nodes: identifies and prints nodes with a degree of 0
+- cycle detection: detects whether a cycle exists and prints which nodes are in a cycle
 - graph density: existing edges/maximum possible edges
-- average shortest path length: computed only if graph is connected
+- average shortest path length: if graph is not connected, the average shortest path is computed on the largest component. 
 
-**Graph Visualization**
-plot(G) function visualizes the generated graph using a spring layout 
-- all nodes and edges are drawn with labels and a legend is provided to distinguish normal nodes from isolated nodes.
-- graph visualization displayed through open window using matplotlib .show function
+**Graph Visualization** -> plot(G) 
+- produces a single combined visualization saved as saved as graph_visualization.png.
+- utilizes a legend and symbology to distinguish normal nodes, isolated nodes and BFS source nodes and tree edges from one another.
+- Draws edges in a light style first (thin gray), then overlays BFS tree edges in distinct colors if BFS results exist.
+- Nodes are styled by role:
+  - Normal nodes: green circles
+  - Isolated nodes: red squares
+  - BFS source nodes: gold circles with black outlines
 
 **Main**
-- parses arguments
-- invalid arguments and invalid values for parameters result in raised errors.
-
+- parses command-line arguments, initializes or loads a graph, and conditionally executes BFS traversal, - analysis, visualization, and output based on user-specified options.
   
-Command Line → argparse → Parsed Namespace → Graph Input/Generation → BFS → Analysis → Visualization → Export
+Command Line → Argument Parsing (argparse) → Parsed Arguments → Graph Input / Generation → BFS Traversal/Visualization → Graph Analysis → Visualization → Graph Export
+
+## Example Commands and Outputs
+
+ `python graph.py --create_random_graph 25 0.8 --multi_BFS 0 5 20 --analyze --plot --output final_graph.gml`
+
+**Erdős–Rényi Graph Generation:**
+
+<img src="https://github.com/user-attachments/assets/a2c7972c-0a2d-40ef-bd5a-4180288c6e6c" width="420" />
+
+**Multi BFS:**
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/42767e02-0ef2-4817-ae2d-62aa503a44c9" width="420" />
+  <img src="https://github.com/user-attachments/assets/e89d440a-72c9-457a-bb05-6f539f53c005" width="420" />
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ddb0efcb-15be-4303-ba4e-7d1df0e3c278" width="420" />
+  <img src="https://github.com/user-attachments/assets/d4a3ba05-27f2-4f2e-8b7b-b0a9a077bff6" width="420" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/15fa3970-1089-43aa-99a6-7d77058dfd05" width="420" />
+  <img src="https://github.com/user-attachments/assets/378ddc71-106c-4045-8301-cfa4b12d41de" width="420" />
+</p>
+
+**Analysis:**
+
+<img width="2585" height="1070" alt="image" src="https://github.com/user-attachments/assets/e8ff7176-934a-42f0-8cb1-7bf684e68776" />
+
+
+**Visualization/Graph Export:**
+
+<img width="3456" height="2160" alt="image" src="https://github.com/user-attachments/assets/c6fede14-59c7-41ef-a698-8c67f61a526a" />
+
+
+
 
 
