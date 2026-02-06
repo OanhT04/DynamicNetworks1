@@ -1,8 +1,7 @@
 #### Oanh Tran:  029661786
-#### William Trinh: 
+#### William Trinh:  030650397
 # CECS 427 -- Assignment 1: Graph.py
-#### Oanh Tran  029661786
-#### William Trinh 030650397
+
 
 `graph.py` is a command-line Python program that works with **undirected graphs** using **NetworkX**. It can:
 
